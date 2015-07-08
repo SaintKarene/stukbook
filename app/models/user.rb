@@ -15,16 +15,16 @@ class User < ActiveRecord::Base
   	self.friendships.create(friend: user_2)
   end
 
-   def active_friends
-  	self.friendships.where(state: "active").map(&:friend) + self.inverse_friendships.where(state: "active").map(&:friend)
+  def pending_friend_requests_from
+  	self.inverse_friendships.where(state: "pending")
   end
 
-   def pending_friend_requests_to
+ def pending_friend_requests_to
   	self.friendships.where(state: "pending")
   end
 
-  def pending_friend_requests_from
-  	self.inverse_friendships.where(state: "pending")
+   def active_friends
+  	self.friendships.where(state: "active").map(&:friend) + self.inverse_friendships.where(state: "active").map(&:friend)
   end
 
   def friendship_status(user_2)
@@ -43,4 +43,10 @@ class User < ActiveRecord::Base
       end
     end
   end
+
+def friendship_relation(user_2)
+  Friendship.where(user_id: [self.id,user_2.id], friend_id: [self.id,user_2.id]).first
+end
+
+
 end
