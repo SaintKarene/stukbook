@@ -18,7 +18,9 @@ end
 	
 
   def show
-  	@activities = PublicActivity::Activity.where(owner_id: @user.id) + PublicActivity::Activity.where(recipient_id: @user.id)
+    @post = Post.new
+    @posts = @user.posts.order('created_at DESC')
+    @activities = PublicActivity::Activity.where(owner_id: @user.id).order('created_at DESC')
   end
 
   private
